@@ -45,6 +45,44 @@ ufw_policy: deny
 
 Whether the UFW firewall is enabled, and if logging is enabled (via the `LOG_KERN` facility). The `ufw_policy` sets the default policy for the firewall when no specific rules apply.  If `ufw_ipv6` is truthy and the `ip6_tables` kernel module is present, the firewall will be enabled for IPv6.  If either is false, IPv6 will be disabled in UFW.
 
+```yaml
+restic_install: true
+restic_enabled: true
+
+restic_repository_uri:
+restic_repository_key:
+restic_repository_env:
+
+restic_notify_cmd:
+restic_forget:
+  daily: 7
+  weekly: 4
+  monthly: 6
+
+restic_periodic_dir: >-
+  {{
+    '/etc/periodic/daily'
+      if ansible_facts['os_family']|lower == 'alpine'
+      else '/etc/cron.daily'
+  }}
+```
+
+Configures the default Restic backup job for the server.  The default Restic configuration expects the repository credentials to be provided as environment variables through `restic_repository_env`, as in the example below.  Applications can install files into `/etc/restic/include.d` and `/etc/restic/exclude.d`, which are provided to Restic as include and exclude paths.  Scripts in `/etc/restic/pre-run.d` are executed prior to running restic.  Files must follow the `run-parts` naming convention: `[A-Za-z0-9_-]` and notably cannot contain a period, or else the file will be skipped.  Files in the `/etc/restic/pre-run.d` directory must be executable.
+
+```yaml
+# Example restic configuration
+restic_install: true
+restic_enabled: true
+restic_repository_url: "b2:restic:/{{ ansible_hostname }}"
+restic_repostiory_key: "0123456789abcdef"
+restic_repository_env:
+  B2_ACCOUNT_ID: "0xxxxxxxxxxxxxxxxxxxxxxx2"
+  B2_ACCOUNT_KEY: "Kxxxxxxxxxxxxxxxxxxxxxxxxxxxxxk"
+restic_notify_cmd: "wget -qO - https://hc-ping.com/12345678-90ab-cdef-1234-567890abcdef >/dev/null"
+```
+
+**Note:** Restic (and SQLite) are not available on Alpine armhf architectures.
+
 ## Role Facts
 
 Facts registered by the role are listed below, with example data:
