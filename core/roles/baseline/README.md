@@ -69,13 +69,13 @@ This role includes two additional entrypoints `pre-tasks.yaml` and `post-tasks.y
     - hosts: all
       pre_tasks:
         include_role:
-          name: asymworks.baseline
+          name: asymworks.core.baseline
           tasks_from: pre-tasks.yml
       roles:
-        asymworks.baseline
+        asymworks.core.baseline
       post_tasks:
         include_role:
-          name: asymworks.baseline
+          name: asymworks.core.baseline
           tasks_from: post-tasks.yml
 
 ## License
