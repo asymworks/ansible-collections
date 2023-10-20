@@ -15,10 +15,7 @@
       - ca-certificates
       - curl
       - gnupg
-      - msmtp
-      - msmtp-mta
-      - nfs-common
-      - ntp
+      - ntpsec
       - python3-bcrypt
       - python3-passlib
       - python3-pip
@@ -42,7 +39,7 @@
 # Setup NTP Server
 - name: Asymworks Baseline (Debian) | Reset Network Time Servers
   ansible.builtin.lineinfile:
-    path: /etc/ntp.conf
+    path: /etc/ntpsec/ntp.conf
     search_string: 'pool.ntp.org'
     state: absent
   notify:
@@ -50,7 +47,7 @@
 
 - name: Asymworks Baseline (Debian) | Set Network Time Server
   ansible.builtin.lineinfile:
-    path: /etc/ntp.conf
+    path: /etc/ntpsec/ntp.conf
     regex: "^server "
     line: "server {{ ntp_server }}"
   notify:

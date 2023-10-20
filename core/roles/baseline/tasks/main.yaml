@@ -3,12 +3,12 @@
 
 # Ensure Asset information is provided
 - name: Asymworks Baseline | Check Asset Name
-  when: (asset_name is not defined) or (asset_name|length == 0)
+  when: (asset_name is not defined) or (asset_name|string|length == 0)
   ansible.builtin.fail:
     msg: "The variable 'asset_name' is not set or is empty"
 
 - name: Asymworks Baseline | Check Asset Tag
-  when: (asset_tag is not defined) or (asset_tag|length == 0)
+  when: (asset_tag is not defined) or (asset_tag|string|length == 0)
   ansible.builtin.fail:
     msg: "The variable 'asset_tag' is not set or is empty"
 
