@@ -1,0 +1,119 @@
+---
+# Alpine-Specific Tasks for asymworks.baseline
+
+# Check Alpine Version >= 3.13 (Asymworks Package Repo Limitation)
+- name: Asymworks Baseline (Alpine) | Check Alpine Version
+  when: ansible_distribution_version is version('3.13', '<')
+  ansible.builtin.fail:
+    msg: 'Unsupported Alpine Version {{ ansible_distribution_version }} - Please Upgrade to 3.13 or later'
+
+# Setup LBU Paths
+- name: Asymworks Baseline (Alpine) | Update LBU Paths
+  when: alpine_diskless
+  ansible.builtin.lineinfile:
+    path: /etc/apk/protected_paths.d/lbu.list
+    regexp: "^[+-]{{ item.path }}$"
+    line: "{{ '-' if item.state == 'exclude' else '+' }}{{ item.path }}"
+    state: "{{ 'absent' if item.state == 'absent' else 'present' }}"
+    create: true
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - path: home/ansible
+      state: include
+    - path: home/ansible/.ansible
+      state: exclude
+    - path: home/ansible/.ash_history
+      state: exclude
+    - path: etc/init.d
+      state: include
+    - path: usr/local/share/ca-certificates/asymworks
+      state: absent
+    - path: usr/local/share/ca-certificates
+      state: include
+
+# Fix Alpine kernel.org Mirror Domain
+- name: Asymworks Baseline (Alpine) | Fix kernel.org APK Mirror
+  ansible.builtin.replace:
+    path: /etc/apk/repositories
+    regexp: sjc\.edge\.kernel\.org
+    replace: na.edge.kernel.org
+
+# Enable Community Repository
+- name: Asymworks Baseline (Alpine) | Enable Community Repository
+  ansible.builtin.lineinfile:
+    path: /etc/apk/repositories
+    regex: '(http.*?)/v{{ alpine_repo_ver }}/community$'
+    line: '\1/v{{ alpine_repo_ver }}/community'
+    state: present
+    backrefs: true
+
+# Enable Asymworks Repository
+- name: Asymworks Baseline (Alpine) | Enable Asymworks Repository
+  ansible.builtin.lineinfile:
+    path: /etc/apk/repositories
+    line: "https://pkgs.asymworks.net/alpine/v{{ alpine_repo_ver }}/main"
+
+- name: Asymworks Baseline (Alpine) | Install Asymworks Package Key
+  ansible.builtin.copy:
+    src: packages@asymworks.com-5ff0a833.rsa.pub
+    dest: /etc/apk/keys/packages@asymworks.com-5ff0a833.rsa.pub
+    mode: "0644"
+
+# Install Basic Packages
+- name: Asymworks Baseline (Alpine) | Install Core Packages
+  community.general.apk:
+    update_cache: true
+    state: present
+    name:
+      - chrony
+      - curl
+      - msmtp
+      - nfs-utils
+      - py3-pip
+      - ufw
+      - vim
+
+# Populate /etc/timezone
+- name: Asymworks Baseline (Alpine) | Populate /etc/timezone
+  ansible.builtin.copy:
+    content: "{{ timezone }}"
+    dest: /etc/timezone
+    owner: root
+    group: root
+    mode: '0644'
+
+# Disable Busybox NTPd
+- name: Asymworks Baseline (Alpine) | Disable Busybox NTPd
+  ansible.builtin.service:
+    name: ntpd
+    state: stopped
+    enabled: false
+
+# Setup NTP Server
+- name: Asymworks Baseline (Alpine) | Configure Network Time Server
+  ansible.builtin.template:
+    src: chrony.conf.j2
+    dest: /etc/chrony/chrony.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Asymworks Baseline (Alpine) | Restart chrony
+
+- name: Asymworks Baseline (Alpine) | Check Network Time Service Directories
+  ansible.builtin.file:
+    path: /var/run/chrony
+    state: directory
+    owner: chrony
+    group: chrony
+    mode: '0750'
+
+- name: Asymworks Baseline (Alpine) | Start Network Time Service
+  # Chrony startup is horribly broken on Github CI
+  when: __molecule_ci is not defined or not __molecule_ci
+  ansible.builtin.service:
+    name: chronyd
+    enabled: true
+    state: started

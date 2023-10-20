@@ -1,0 +1,124 @@
+---
+# Tasks File for Role `asymworks.core.baseline`
+
+# Ensure Asset information is provided
+- name: Asymworks Baseline | Check Asset Name
+  when: (asset_name is not defined) or (asset_name|length == 0)
+  ansible.builtin.fail:
+    msg: "The variable 'asset_name' is not set or is empty"
+
+- name: Asymworks Baseline | Check Asset Tag
+  when: (asset_tag is not defined) or (asset_tag|length == 0)
+  ansible.builtin.fail:
+    msg: "The variable 'asset_tag' is not set or is empty"
+
+# Run Distribution-Specific Setup Tasks
+- name: Docker | Run Alpine Distribution Tasks
+  ansible.builtin.import_tasks: main-alpine.yaml
+  when: ansible_facts['os_family']|lower == 'alpine'
+
+- name: Docker | Run Debian Distribution Tasks
+  ansible.builtin.import_tasks: main-debian.yaml
+  when: ansible_facts['os_family']|lower == 'debian'
+
+# Remove Old Certificate Files
+- name: Asymworks Baseline | Remove Old Certificates
+  ansible.builtin.file:
+    path: /usr/local/share/ca-certificates/asymworks
+    state: absent
+
+# Copy Certificate Files
+- name: Asymworks Baseline | Copy CA Certificates
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "/usr/local/share/ca-certificates/{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - src: root-ca.crt
+      dest: Asymworks_Root_CA.crt
+    - src: identity-ca.crt
+      dest: Asymworks_Identity_CA.crt
+    - src: network-ca.crt
+      dest: Asymworks_Network_CA.crt
+  notify: Asymworks Baseline | Update CA Certificates
+
+# Disable Root SSH Logins
+- name: Asymworks Baseline | Disable SSH Root Login
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    state: present
+    regexp: '^PermitRootLogin '
+    line: 'PermitRootLogin no'
+  notify: Asymworks Baseline | Restart sshd
+
+# Disable SSH Password Logins
+- name: Asymworks Baseline | Disable SSH Password Login
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    state: present
+    regexp: '^PasswordAuthentication '
+    line: 'PasswordAuthentication no'
+  notify: Asymworks Baseline | Restart sshd
+
+# Disable WiFi Power Management
+- name: Asymworks Baseline | Check for /etc/network/interfaces
+  when: ansible_facts['wlan0'] is defined and ansible_facts['wlan0']['active']
+  ansible.builtin.stat:
+    path: /etc/network/interfaces
+  register: rc_net_intfs
+
+- name: Asymworks Baseline | Disable WiFi Power Management
+  when: ansible_facts['wlan0'] is defined and ansible_facts['wlan0']['active'] and rc_net_intfs.stat.exists
+  ansible.builtin.lineinfile:
+    path: '/etc/network/interfaces'
+    line: "\tpost-up iwconfig wlan0 power off"  # noqa: no-tabs
+    insertafter: "^iface wlan0 inet"
+  notify: Asymworks Baseline | Restart Networking
+
+# Install a Custom MOTD File
+- name: Asymworks Baseline | Setup MOTD
+  ansible.builtin.template:
+    src: motd.j2
+    dest: /etc/motd
+    owner: root
+    group: root
+    mode: "0644"
+
+# Disable Firewall IPv6
+- name: Asymworks Baseline | Check IPv6 Kernel Module
+  ansible.builtin.command:
+    cmd: grep ip6_tables /proc/modules
+  register: ret
+  check_mode: false
+  changed_when: false
+  failed_when: ret.rc != 0 and ret.rc != 1
+
+- name: Asymworks Baseline | Disable IPv6 Firewall
+  ansible.builtin.lineinfile:
+    dest: /etc/ufw/ufw.conf
+    regexp: '^IPV6'
+    line: "IPV6={{ 'no' if ret.rc == 1 or not ufw_ipv6 else 'yes' }}"
+    state: present
+  register: ret
+
+- name: Asymworks Baseline | Reload Firewall
+  when: ret.changed and ufw_enabled
+  community.general.ufw:
+    state: reloaded
+
+# Setup Firewall
+- name: Asymworks Baseline | Enable Firewall
+  community.general.ufw:
+    state: "{{ 'enabled' if ufw_enabled else 'disabled' }}"
+    policy: "{{ ufw_policy | default('deny') }}"
+    logging: "{{ ufw_logging | default('off') }}"
+
+# Allow OpenSSH. (Note that as ufw manages its own state, simply removing
+# a rule=allow task can leave those ports exposed. Either use delete=yes
+# or a separate state=reset task)
+- name: Asymworks Baseline | Allow SSH Connections
+  community.general.ufw:
+    rule: allow
+    name: "{{ ufw_ssh_appname | default('SSH') }}"

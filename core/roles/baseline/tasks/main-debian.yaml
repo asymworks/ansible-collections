@@ -1,0 +1,55 @@
+---
+# Debian-Specific Tasks for kraussnet.common
+
+# Ensure Debian version is at least 9
+- name: Asymworks Baseline (Debian) | Check Version
+  when: ansible_distribution_version is version('9', '<')
+  ansible.builtin.fail:
+    msg: 'Unsupported Debian Version {{ ansible_distribution_version }} - Please Upgrade to Stretch or later'
+
+# Install Basic Packages
+- name: Asymworks Baseline (Debian) | Install Core Packages
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - msmtp
+      - msmtp-mta
+      - nfs-common
+      - ntp
+      - python3-bcrypt
+      - python3-passlib
+      - python3-pip
+      - ufw
+      - vim
+    update_cache: true
+
+# Set System Timezone
+- name: Asymworks Baseline (Debian) | Set Timezone
+  community.general.timezone:
+    name: "{{ timezone }}"
+
+# Setup NTP Server
+- name: Asymworks Baseline (Debian) | Reset Network Time Servers
+  ansible.builtin.lineinfile:
+    path: /etc/ntp.conf
+    search_string: 'pool.ntp.org'
+    state: absent
+  notify:
+    - Asymworks Baseline (Debian) | Restart ntpd
+
+- name: Asymworks Baseline (Debian) | Set Network Time Server
+  ansible.builtin.lineinfile:
+    path: /etc/ntp.conf
+    regex: "^server "
+    line: "server {{ ntp_server }}"
+  notify:
+    - Asymworks Baseline (Debian) | Restart ntpd
+
+- name: Asymworks Baseline (Debian) | Start Network Time Service
+  ansible.builtin.service:
+    name: ntp
+    enabled: true
+    state: started

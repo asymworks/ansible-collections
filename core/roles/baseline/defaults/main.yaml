@@ -1,0 +1,21 @@
+---
+# Variable Defaults for `asymworks.baseline.core`
+
+# Default Timezone is Los Angeles
+timezone: America/Los_Angeles
+
+# Default NTP Server
+ntp_server: time.nist.gov
+ntp_bootstrap: false
+
+# Firewall Setup
+ufw_enabled: true
+ufw_ipv6: false
+ufw_logging: false
+ufw_policy: deny
+ufw_ssh_appname: >-
+  {{
+      'OpenSSH'
+        if ansible_facts['distribution']|lower == 'ubuntu'
+        else 'SSH'
+  }}

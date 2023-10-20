@@ -1,0 +1,10 @@
+---
+# Ansible Linter Settings
+
+warn_list:
+  - experimental
+
+skip_list:
+  - meta-no-info
+  - var-spacing
+  - var-naming[no-role-prefix]

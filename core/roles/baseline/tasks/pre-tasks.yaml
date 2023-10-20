@@ -1,0 +1,17 @@
+---
+# Pre-Play Tasks
+
+# Run Distribution-Specific Tasks
+- name: Docker | Run Alpine Distribution Tasks
+  ansible.builtin.import_tasks: pre-alpine.yaml
+  when: ansible_facts['os_family']|lower == 'alpine'
+
+# Check for a Real-Time Clock Device
+- name: Asymworks Baseline Pre-Task | Check for RTC
+  ansible.builtin.stat:
+    path: /dev/rtc
+  register: st_rtc
+
+- name: Asymworks Baseline Pre-Task | Register RTC Fact
+  ansible.builtin.set_fact:
+    has_rtc: "{{ st_rtc.stat.ischr is defined and st_rtc.stat.ischr }}"

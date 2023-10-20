@@ -1,0 +1,36 @@
+---
+# Handlers for asymworks.baseline
+
+- name: Asymworks Baseline | Restart sshd
+  ansible.builtin.service:
+    name: sshd
+    state: restarted
+
+- name: Asymworks Baseline (Alpine) | Restart chrony
+  # Chrony startup is horribly broken on Github CI
+  when: __molecule_ci is not defined or not __molecule_ci
+  ansible.builtin.service:
+    name: chronyd
+    state: restarted
+
+- name: Asymworks Baseline (Debian) | Restart ntpd
+  ansible.builtin.service:
+    name: ntp
+    state: restarted
+
+- name: Asymworks Baseline | Restart Networking
+  ansible.builtin.service:
+    name: networking
+    state: restarted
+
+- name: Asymworks Baseline | Update CA Certificates
+  ansible.builtin.command: /usr/sbin/update-ca-certificates
+  changed_when: true
+
+- name: Asymworks Baseline (Alpine) | Update LBU
+  ansible.builtin.command:
+    cmd: lbu ci
+  when: alpine_diskless
+  become: true
+  changed_when: true
+  failed_when: ret.stderr != ''

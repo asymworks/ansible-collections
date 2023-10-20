@@ -1,0 +1,14 @@
+namespace: asymworks
+name: core
+version: 1.0.0
+readme: README.md
+authors:
+  - Jonathan Krauss <jkrauss@asymworks.com>
+description: Baseline configuration and software installation of server systems
+license:
+  - MIT
+
+repository: https://github.com/asymworks/ansible-collections
+
+# Tags
+tags: [infrastructure, tools]

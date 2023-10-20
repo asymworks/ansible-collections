@@ -1,0 +1,7 @@
+---
+# Post-Play Tasks
+
+# Run Distribution-Specific Tasks
+- name: Docker | Run Alpine Distribution Tasks
+  ansible.builtin.import_tasks: post-alpine.yaml
+  when: ansible_facts['os_family']|lower == 'alpine'
