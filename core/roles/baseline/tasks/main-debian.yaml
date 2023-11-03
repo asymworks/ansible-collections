@@ -29,7 +29,15 @@
     name:
       - restic
       - sqlite3
-    state: "{{ 'present' if restic_install else 'absent' }}"
+    state: "{{ 'present' if restic_enabled else 'absent' }}"
+
+# Install mSMTP Packages
+- name: Asymworks Baseline (Debian) | Install mSMTP Packages
+  community.general.apt:
+    name: 
+      - msmtp
+      - msmtp-mta
+    state: "{{ 'present' if msmtp_enabled else 'absent' }}"
 
 # Set System Timezone
 - name: Asymworks Baseline (Debian) | Set Timezone

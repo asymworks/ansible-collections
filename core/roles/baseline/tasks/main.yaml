@@ -122,3 +122,54 @@
   community.general.ufw:
     rule: allow
     name: "{{ ufw_ssh_appname | default('SSH') }}"
+
+# Setup mSMTP
+- name: Asymworks Baseline | Copy mSMTP Configuration
+  when: msmtp_enabled
+  ansible.builtin.template:
+    src: msmtprc.j2
+    dest: /etc/msmtprc
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Asymworks Baseline | Remove mSMTP Configuration
+  when: not msmtp_enabled
+  ansible.builtin.file:
+    path: /etc/msmtprc
+    state: absent
+
+# Setup Restic
+- name: Asymworks Baseline | Setup Restic Directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: '0755'
+    state: "{{ 'directory' if restic_enabled else 'absent' }}"
+  loop:
+    - /etc/restic
+    - /etc/restic/exclude.d
+    - /etc/restic/include.d
+    - /etc/restic/pre-run.d
+
+- name: Asymworks Baseline | Install Restic Script
+  when: restic_enabled
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ restic_periodic_dir }}/{{ item }}"
+    owner: root
+    group: root
+    mode: '0750'
+  loop:
+    - 40-restic-default
+    - 70-restic-prune-default
+
+- name: Asymworks Baseline | Remove Restic Script
+  when: not restic_enabled
+  ansible.builtin.file:
+    path: "{{ restic_periodic_dir }}/{{ item }}"
+    state: 'absent'
+  loop:
+    - 40-restic-default
+    - 70-restic-prune-default

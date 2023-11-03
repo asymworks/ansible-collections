@@ -79,7 +79,14 @@
     name:
       - restic
       - sqlite
-    state: "{{ 'present' if restic_install and ansible_architecture != 'armv6l' else 'absent' }}"
+    state: "{{ 'present' if restic_enabled and ansible_architecture != 'armv6l' else 'absent' }}"
+
+# Install mSMTP Packages
+- name: Asymworks Baseline (Alpine) | Install mSMTP Packages
+  community.general.apk:
+    name: 
+      - msmtp
+    state: "{{ 'present' if msmtp_enabled else 'absent' }}"
 
 # Populate /etc/timezone
 - name: Asymworks Baseline (Alpine) | Populate /etc/timezone
@@ -123,3 +130,25 @@
     name: chronyd
     enabled: true
     state: started
+
+# Setup mSMTP MTA (symlink for sendmail)
+- name: Asymworks Baseline (Alpine) | Install msmtp
+  when: msmtp_enabled
+  block:
+    - name: Asymworks Baseline (Alpine / msmtp MTA) | Setup MTA Link
+      ansible.builtin.file:
+        path: /usr/sbin/sendmail
+        src: /usr/bin/msmtp
+        state: link
+
+    - name: Asymworks Baseline (Alpine / msmtp MTA) | Persist MTA Link
+      ansible.builtin.copy:
+        src: 98-relink-sendmail.start
+        dest: /etc/local.d/98-relink-sendmail.start
+        mode: 0755
+
+    - name: Asymworks Baseline (Alpine / msmtp MTA) | Enable Local Service
+      ansible.builtin.service:
+        name: local
+        enabled: true
+        state: started

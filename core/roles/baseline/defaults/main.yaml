@@ -20,8 +20,22 @@ ufw_ssh_appname: >-
         else 'SSH'
   }}
 
+# mSMTP Setup
+msmtp_enabled: false
+msmtp_accounts:
+  - name: default
+    sender: username@gmail.com
+    host: smtp.gmail.com
+    port: 587
+    tls: true
+    auth: true
+    username: username@gmail.com
+    password: app-password
+
+# mSMTP Default Sender Account
+msmtp_default_account: default
+
 # Restic Setup
-restic_install: true
 restic_enabled: true
 
 restic_repository_uri:

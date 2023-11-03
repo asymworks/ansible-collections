@@ -5,8 +5,10 @@ An Ansible Role that installs common files and utilities on Asymworks servers ru
 - Updates package lists and installs basic utilties such as `curl` and `vim`
 - Disables SSH root login and user password login
 - Installs a MOTD which displays the asset name and tag
+- Installs the `restic` backup agent
 - Installs and starts the `ntpd` service with a configurable NTP server
 - Installs and optionally enables `ufw` and opens the SSH port
+- Installs and optionally enables `msmtp` to send email messages
 
 ## Requirements
 
@@ -46,8 +48,23 @@ ufw_policy: deny
 Whether the UFW firewall is enabled, and if logging is enabled (via the `LOG_KERN` facility). The `ufw_policy` sets the default policy for the firewall when no specific rules apply.  If `ufw_ipv6` is truthy and the `ip6_tables` kernel module is present, the firewall will be enabled for IPv6.  If either is false, IPv6 will be disabled in UFW.
 
 ```yaml
-restic_install: true
-restic_enabled: true
+msmtp_enabled: false
+msmtp_accounts:
+  - name: default
+    host: smtp.gmail.com
+    port: 587
+    tls: true
+    auth: true
+    username: username@gmail.com
+    password: app-password
+
+msmtp_default_account: default
+```
+
+Whether the `msmtp` mail transfer agent is enabled, and the account settings to use for it.  Multiple accounts can be defined here using a YAML list with the options shown.  The `tls` and `auth` options may be omitted, and both default to `false`.  When no account is specified for the `msmtp` command, the account used is set by the `msmtp_default_account` variable.
+
+```yaml
+restic_enabled: false
 
 restic_repository_uri:
 restic_repository_key:
@@ -71,7 +88,6 @@ Configures the default Restic backup job for the server.  The default Restic con
 
 ```yaml
 # Example restic configuration
-restic_install: true
 restic_enabled: true
 restic_repository_url: "b2:restic:/{{ ansible_hostname }}"
 restic_repostiory_key: "0123456789abcdef"
