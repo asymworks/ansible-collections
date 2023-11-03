@@ -33,8 +33,8 @@
 
 # Install mSMTP Packages
 - name: Asymworks Baseline (Debian) | Install mSMTP Packages
-  community.general.apt:
-    name: 
+  ansible.builtin.apt:
+    name:
       - msmtp
       - msmtp-mta
     state: "{{ 'present' if msmtp_enabled else 'absent' }}"

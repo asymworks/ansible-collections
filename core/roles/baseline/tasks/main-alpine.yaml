@@ -84,7 +84,7 @@
 # Install mSMTP Packages
 - name: Asymworks Baseline (Alpine) | Install mSMTP Packages
   community.general.apk:
-    name: 
+    name:
       - msmtp
     state: "{{ 'present' if msmtp_enabled else 'absent' }}"
 
@@ -145,7 +145,7 @@
       ansible.builtin.copy:
         src: 98-relink-sendmail.start
         dest: /etc/local.d/98-relink-sendmail.start
-        mode: 0755
+        mode: '0755'
 
     - name: Asymworks Baseline (Alpine / msmtp MTA) | Enable Local Service
       ansible.builtin.service:

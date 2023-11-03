@@ -131,7 +131,7 @@
     dest: /etc/msmtprc
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
 
 - name: Asymworks Baseline | Remove mSMTP Configuration
   when: not msmtp_enabled
