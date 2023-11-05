@@ -27,7 +27,7 @@ Configures NFSv4 ID mapping and optionally enables automatic mount of NFS volume
 
 ## Dependencies
 
-None
+This requires the `asymworks.core.baseline` role to be installed.
 
 ## Additional Entry Points
 

@@ -1,0 +1,9 @@
+---
+# Ubuntu-Specific Tasks for asymworks.rsyslog
+
+# Install Rsyslog Package
+- name: Asymworks Rsyslog (Ubuntu) | Install Rsyslog Package
+  when: rsyslog_enabled
+  ansible.builtin.apt:
+    name: rsyslog
+    state: present

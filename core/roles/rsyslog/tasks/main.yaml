@@ -1,0 +1,43 @@
+---
+# Main Entry Point for asymworks.baseline
+
+# Run Distribution-Specific Setup Tasks
+- name: Docker | Run Alpine Distribution Tasks
+  ansible.builtin.import_tasks: main-alpine.yaml
+  when: ansible_facts['os_family']|lower == 'alpine'
+
+- name: Docker | Run Debian Distribution Tasks
+  ansible.builtin.import_tasks: main-debian.yaml
+  when: ansible_facts['os_family']|lower == 'debian' and ansible_facts['distribution']|lower == 'debian'
+
+- name: Docker | Run Ubuntu Distribution Tasks
+  ansible.builtin.import_tasks: main-ubuntu.yaml
+  when: ansible_facts['os_family']|lower == 'debian' and ansible_facts['distribution']|lower == 'ubuntu'
+
+# Setup Remote Logging
+- name: Asymworks Rsyslog | Create /etc/rsyslog.d
+  ansible.builtin.file:
+    path: /etc/rsyslog.d
+    state: directory
+    mode: '0755'
+
+- name: Asymworks Rsyslog | Copy Remote Syslog Configuration
+  ansible.builtin.template:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    mode: '0644'
+  with_items:
+    - src: etc/rsyslog.conf.j2
+      dest: /etc/rsyslog.conf
+    - src: etc/rsyslog.d/10-remote.conf.j2
+      dest: /etc/rsyslog.d/10-remote.conf
+    - src: etc/rsyslog.d/11-local.conf.j2
+      dest: /etc/rsyslog.d/11-local.conf
+  notify:
+    - Asymworks Baseline | Restart rsyslog
+
+- name: Asymworks Rsyslog | Start Remote Syslog Service
+  ansible.builtin.service:
+    name: rsyslog
+    enabled: "{{ rsyslog_enabled }}"
+    state: "{{ 'started' if rsyslog_enabled else 'stopped' }}"

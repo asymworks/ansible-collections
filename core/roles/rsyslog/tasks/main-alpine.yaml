@@ -1,0 +1,10 @@
+---
+# Alpine-Specific Tasks for asymworks.rsyslog
+
+# Install Packages
+- name: Asymworks Baseline (Alpine) | Install Core Packages
+  community.general.apk:
+    update_cache: true
+    state: present
+    name:
+      - rsyslog

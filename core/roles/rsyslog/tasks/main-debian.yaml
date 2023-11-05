@@ -1,0 +1,23 @@
+---
+# Debian-Specific Tasks for asymworks.rsyslog
+
+# Ensure Debian version is at least 9
+- name: Asymworks Rsyslog (Debian) | Check Version
+  when: ansible_distribution_version is version('9', '<')
+  ansible.builtin.fail:
+    msg: 'Unsupported Debian Version {{ ansible_distribution_version }} - Please Upgrade to Stretch or later'
+
+# Install Stretch Backports
+- name: Asymworks Rsyslog (Debian) | Install Backports Repository
+  when: rsyslog_enabled and ansible_distribution_version is version('10', '<')
+  ansible.builtin.apt_repository:
+    repo: "deb http://deb.debian.org/debian stretch-backports main"
+    state: present
+
+# Install Rsyslog Package
+- name: Asymworks Rsyslog (Debian) | Install Rsyslog Package
+  when: rsyslog_enabled
+  ansible.builtin.apt:
+    name: rsyslog
+    state: present
+    default_release: "{{ 'stretch-backports' if ansible_distribution_version is version('10', '<') else None }}"

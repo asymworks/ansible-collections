@@ -1,0 +1,8 @@
+---
+# Handlers for asymworks.rsyslog
+
+- name: Asymworks Baseline | Restart rsyslog
+  when: rsyslog_enabled
+  ansible.builtin.service:
+    name: rsyslog
+    state: restarted
