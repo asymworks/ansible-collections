@@ -69,6 +69,7 @@
     name:
       - chrony
       - curl
+      - nfs-utils
       - py3-pip
       - ufw
       - vim
