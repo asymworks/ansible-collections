@@ -2,15 +2,15 @@
 # Main Entry Point for asymworks.baseline
 
 # Run Distribution-Specific Setup Tasks
-- name: Docker | Run Alpine Distribution Tasks
+- name: Asymworks Rsyslog | Run Alpine Distribution Tasks
   ansible.builtin.import_tasks: main-alpine.yaml
   when: ansible_facts['os_family']|lower == 'alpine'
 
-- name: Docker | Run Debian Distribution Tasks
+- name: Asymworks Rsyslog | Run Debian Distribution Tasks
   ansible.builtin.import_tasks: main-debian.yaml
   when: ansible_facts['os_family']|lower == 'debian' and ansible_facts['distribution']|lower == 'debian'
 
-- name: Docker | Run Ubuntu Distribution Tasks
+- name: Asymworks Rsyslog | Run Ubuntu Distribution Tasks
   ansible.builtin.import_tasks: main-ubuntu.yaml
   when: ansible_facts['os_family']|lower == 'debian' and ansible_facts['distribution']|lower == 'ubuntu'
 
