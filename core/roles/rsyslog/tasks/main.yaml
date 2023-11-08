@@ -21,6 +21,14 @@
     state: directory
     mode: '0755'
 
+- name: Asymworks Rsyslog | Create /var/lib/rsyslog
+  ansible.builtin.file:
+    path: /var/lib/rsyslog
+    state: directory
+    owner: root
+    group: adm
+    mode: '0700'
+
 - name: Asymworks Rsyslog | Copy Remote Syslog Configuration
   ansible.builtin.template:
     src: '{{ item.src }}'
