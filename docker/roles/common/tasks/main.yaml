@@ -36,11 +36,6 @@
     enabled: true
     state: started
 
-# Install Python Docker SDK
-- name: Asymworks Docker | Install Docker Module for Python
-  ansible.builtin.pip:
-    name: docker
-
 # Slurp Docker Daemon Configuration
 - name: Asymworks Docker | Initialize Configuration
   ansible.builtin.set_fact:

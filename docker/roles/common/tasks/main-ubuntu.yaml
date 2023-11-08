@@ -28,4 +28,5 @@
   ansible.builtin.apt:
     name:
       - docker-ce
+      - python3-docker
     state: present
