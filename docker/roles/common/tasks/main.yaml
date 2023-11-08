@@ -49,11 +49,11 @@
 - name: Asymworks Docker | Read Configuration
   when: rc.stat.exists
   block:
-    - name: Docker | Slurp Daemon Configuration
+    - name: Asymworks Docker | Slurp Daemon Configuration
       ansible.builtin.slurp:
         src: /etc/docker/daemon.json
       register: slurped
-    - name: Docker | Store Daemon Configuration
+    - name: Asymworks Docker | Store Daemon Configuration
       ansible.builtin.set_fact:
         daemon_json: "{{ slurped.content | b64decode | from_json }}"
 
@@ -70,17 +70,17 @@
 - name: Asymworks Docker | Disable IPv6
   when: docker_ipv6 is not defined or not docker_ipv6
   block:
-    - name: Docker (IPv6) | Remove IPv6 NAT
+    - name: Asymworks Docker (IPv6) | Remove IPv6 NAT
       community.docker.docker_container:
         name: ipv6nat
         state: absent
 
-    - name: Docker (IPv6) | Remove IPv6 Network
+    - name: Asymworks Docker (IPv6) | Remove IPv6 Network
       community.docker.docker_network:
         name: "{{ docker_ipv6_network }}"
         state: absent
 
-    - name: Docker (IPv6) | Disable Daemon IPv6
+    - name: Asymworks Docker (IPv6) | Disable Daemon IPv6
       ansible.builtin.set_fact:
         daemon_json: '{{
           daemon_json
