@@ -25,6 +25,13 @@ rsyslog_preserve_fqdn: true
 
 Sets the hostname that Rsyslog reports.  If this is unset (the default), the Rsyslog default behavior will be used.  Set `rsyslog_preserve_fqdn` to `true` to have Rsyslog preserve the FQDN of the host, otherwise the short hostname will be sent.
 
+```yaml
+rsyslog_local_file: /var/log/messages
+rsyslog_local_level: '*'
+```
+
+Sets the minimum log level for local logging (to `rsyslog_local_file`). By default all messages are logged locally as well as remotely. If `rsyslog_local_file` is empty, this function will be disabled and logs will not be written locally (e.g. when `journald` is used).
+
 ## Role Facts
 
 None

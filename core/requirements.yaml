@@ -1,0 +1,6 @@
+---
+# Requirements for `asymworks.core.baseline`
+
+collections:
+  - name: community.general
+    version: ">=7.0.0"

@@ -1,5 +1,5 @@
 # rsyslog configuration file
 # This file is managed by Ansible
 
-# Log all WARN and higher to disk
-*.warn -/var/log/messages
+# Log messages locally
+{{ '# ' if not rsyslog_local_file else '' }}*.{{ rsyslog_local_level|default('*') }} {{ rsyslog_local_file|default(/var/log/messages) }}

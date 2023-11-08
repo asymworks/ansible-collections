@@ -8,3 +8,6 @@ rsyslog_port: 10514
 
 rsyslog_hostname:
 rsyslog_preserve_fqdn: true
+
+rsyslog_local_file: /var/log/messages
+rsyslog_local_level: '*'
