@@ -1,0 +1,71 @@
+---
+# Tasks File for `asymworks.docker.traefik`
+
+# Configure Traefik
+- name: Asymworks Docker (Traefik) | Create Directories
+  when: traefik_enabled
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - /srv/traefik
+    - /srv/traefik/acme
+    - /srv/traefik/certs
+    - /srv/traefik/conf.d
+    - "{{ traefik_access_log_path }}"
+
+- name: Asymworks Docker (Traefik) | Copy Configuration
+  when: traefik_enabled
+  ansible.builtin.template:
+    src: "traefik.yml.j2"
+    dest: /srv/traefik/traefik.yml
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Docker (Traefik) | Restart Traefik
+
+- name: Asymworks Docker (Traefik) | Setup Docker Network
+  community.docker.docker_network:
+    name: "{{ traefik_network }}"
+    state: "{{ 'present' if traefik_enabled else 'absent' }}"  # noqa: args[module]
+
+- name: Asymworks Docker (Traefik) | Setup Docker Container
+  community.docker.docker_container:
+    name: traefik
+    image: "traefik:{{ traefik_tag }}"
+    security_opts:
+      - no-new-privileges:true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /srv/traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - /srv/traefik/acme:/etc/traefik/acme:rw
+      - /srv/traefik/certs:/etc/traefik/certs:rw
+      - /srv/traefik/conf.d:/etc/traefik/conf.d:ro
+      - /var/log/traefik:/var/log:rw
+    published_ports: "{{ traefik_docker_ports }}"
+    network_mode: default
+    networks:
+      - name: bridge
+      - name: "{{ traefik_network }}"
+    labels:
+      diun.enable: "{{ diun_enabled|bool|string }}"
+    pull: "{{ docker_upgrade_images | default(false) | bool }}"
+    restart_policy: unless-stopped
+    container_default_behavior: compatibility
+    state: "{{ 'started' if traefik_enabled else 'absent' }}"
+
+- name: Asymworks Docker (Traefik) | Install Logrotate Configuration
+  when: traefik_logrotate_enabled
+  ansible.builtin.template:
+    src: "logrotate.d/traefik.j2"
+    dest: "/etc/logrotate.d/traefik"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Asymworks Docker (Traefik) | Remove logrotate Configuration
+  when: not traefik_logrotate_enabled
+  ansible.builtin.file:
+    path: /etc/logrotate.d/traefik
+    state: absent

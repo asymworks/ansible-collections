@@ -1,0 +1,26 @@
+---
+# Tasks File for `asymworks.docker.diun`
+
+- name: Asymworks Docker (Diun) | Setup Container
+  community.docker.docker_container:
+    name: diun
+    image: "crazymax/diun:{{ diun_tag }}"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    env:
+      TZ: "{{ timezone }}"
+      LOG_LEVEL: info
+      LOG_JSON: "false"
+      DIUN_WATCH_WORKERS: "{{ diun_watch_workers }}"
+      DIUN_WATCH_SCHEDULE: "{{ diun_watch_schedule }}"
+      DIUN_PROVIDERS_DOCKER: "true"
+      DIUN_PROVIDERS_DOCKER_WATCHSTOPPED: "{{ diun_watch_stopped }}"
+      DIUN_NOTIF_MAIL_HOST: "{{ diun_notif_mail_host }}"
+      DIUN_NOTIF_MAIL_PORT: "{{ diun_notif_mail_port }}"
+      DIUN_NOTIF_MAIL_LOCALNAME: "{{ diun_notif_mail_localname }}"
+      DIUN_NOTIF_MAIL_FROM: "{{ diun_notif_mail_from }}"
+      DIUN_NOTIF_MAIL_TO: "{{ diun_notif_mail_to }}"
+    pull: "{{ docker_upgrade_images | default(false) | bool }}"
+    container_default_behavior: compatibility
+    restart_policy: unless-stopped
+    state: "{{ 'started' if diun_enabled else 'absent' }}"

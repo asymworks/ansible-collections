@@ -1,0 +1,15 @@
+---
+# Variable Defaults for `asymworks.docker.diun`
+
+# Docker Diun Configuration
+diun_enabled: true
+diun_tag: latest
+diun_watch_schedule: 0 */6 * * *
+diun_watch_stopped: 'false'
+diun_watch_workers: '20'
+
+diun_notif_mail_host: localhost
+diun_notif_mail_port: '25'
+diun_notif_mail_localname: "{{ ansible_hostname }}"
+diun_notif_mail_from: "diun@{{ ansible_fqdn }}"
+diun_notif_mail_to: "diun@localhost"

@@ -1,0 +1,31 @@
+---
+# Variable Defaults for `asymworks.docker.traefik`
+
+# Docker Traefik Configuration
+traefik_enabled: false
+traefik_tag: "v2.5"
+traefik_domain: "{{ ansible_domain }}"
+traefik_network: traefik
+traefik_log_level: INFO
+traefik_access_log: {}
+traefik_access_log_path: /var/log/traefik
+traefik_cert_resolvers: {}
+traefik_yml_additional: {}
+
+# Traefik Entrypoints
+traefik_http_port: "80"
+traefik_https_port: "443"
+traefik_entrypoints:
+  web:
+    address: ":{{ traefik_http_port }}"
+
+traefik_docker_ports:
+  - "{{ traefik_http_port }}:80/tcp"
+  - "{{ traefik_https_port }}:443/tcp"
+
+# Traefik Firewall Configuration
+traefik_ufw_app: WWW Full
+traefik_ufw_ports: []
+
+# Traefik Logrotate Configuration
+traefik_logrotate_enabled: "{{ traefik_access_log|bool }}"
