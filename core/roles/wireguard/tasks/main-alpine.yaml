@@ -1,0 +1,10 @@
+---
+# Alpine-Specific Tasks for asymworks.baseline
+
+# Install Packages
+- name: Asymworks Wireguard (Alpine) | Install Packages
+  community.general.apk:
+    update_cache: true
+    state: present
+    name:
+      - wireguard-tools

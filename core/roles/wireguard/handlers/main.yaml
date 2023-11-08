@@ -1,0 +1,9 @@
+---
+# Handlers File for Role `asymworks.core.wireguard`
+
+- name: Asymworks Wireguard (Debian) | Reload Interfaces
+  when: item.value.enabled|default(true) and item.value.state|default('started') not in ['absent', 'stopped']
+  ansible.builtin.service:
+    name: "wg-quick@{{ item.key }}"
+    state: "restarted"
+  loop: "{{ wireguard_interfaces|dict2items }}"

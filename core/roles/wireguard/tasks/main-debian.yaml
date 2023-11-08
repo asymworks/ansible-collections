@@ -1,0 +1,41 @@
+---
+# Debian-Specific Tasks for kraussnet.common
+
+# Ensure Debian version is at least 11 (Bullseye)
+- name: Asymworks Wireguard (Debian) | Check Version
+  when: ansible_distribution_version is version('11', '<')
+  ansible.builtin.fail:
+    msg: 'Unsupported Debian Version {{ ansible_distribution_version }} - Please Upgrade to Bullseye or later'
+
+# Install Basic Packages
+- name: Asymworks Wireguard (Debian) | Install Packages
+  ansible.builtin.apt:
+    name:
+      - wireguard
+    update_cache: true
+
+# Create Wireguard Configurations
+- name: Asymworks Wireguard (Debian) | Create Interface Configuration
+  when: item.value.state|default('started') != 'absent'
+  ansible.builtin.template:
+    src: wg.conf.j2
+    dest: "/etc/wireguard/{{ item.key }}.conf"
+    owner: root
+    group: root
+    mode: '0600'
+  loop: "{{ wireguard_interfaces|dict2items }}"
+  notify: Asymworks Wireguard (Debian) | Reload Interfaces
+
+- name: Asymworks Wireguard (Debian) | Remove Interface Configuration
+  when: item.value.state|default('started') == 'absent'
+  ansible.builtin.file:
+    path: "/etc/wireguard{{ item.key }}.conf"
+    state: absent
+  loop: "{{ wireguard_interfaces|dict2items }}"
+
+- name: Asymworks Wireguard (Debian) | Start Interface
+  ansible.builtin.service:
+    name: "wg-quick@{{ item.key }}"
+    enabled: "{{ item.value.enabled|default(true) and item.value.state|default('started') != 'absent' }}"
+    state: "{{ 'stopped' if not item.value.enabled|default(true) or item.value.state|default('present') in ['absent', 'stopped'] else 'started' }}"
+  loop: "{{ wireguard_interfaces|dict2items }}"

@@ -1,0 +1,13 @@
+# This file is managed with Ansible
+# Wireguard Configuration for {{ item.key }}
+
+[Interface]
+PrivateKey = {{ item.value.private_key }}
+Address = {{ item.value.address if item.value.address is string else item.value.address|join(',') }}
+{% if 'dns' in item.value -%}DNS = {{ item.value.dns if item.value.dns is string else item.value.dns|join(',') }}
+{%- endif %}
+
+[Peer]
+PublicKey = {{ item.value.peer.public_key }}
+AllowedIPs = {{ item.value.peer.allowed_ips if item.value.peer.allowed_ips is string else item.value.peer.allowed_ips|join(',') }}
+Endpoint = {{ item.value.peer.endpoint }}

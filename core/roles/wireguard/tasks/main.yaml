@@ -1,0 +1,11 @@
+---
+# Tasks File for Role `asymworks.core.wireguard`
+
+# Run Distribution-Specific Setup Tasks
+- name: Asymworks Wireguard | Run Alpine Distribution Tasks
+  ansible.builtin.import_tasks: main-alpine.yaml
+  when: ansible_facts['os_family']|lower == 'alpine'
+
+- name: Asymworks Wireguard | Run Debian Distribution Tasks
+  ansible.builtin.import_tasks: main-debian.yaml
+  when: ansible_facts['os_family']|lower == 'debian'

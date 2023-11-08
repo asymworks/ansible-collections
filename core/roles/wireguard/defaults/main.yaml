@@ -1,0 +1,17 @@
+---
+# Variable Defaults for `asymworks.core.wireguard`
+
+wireguard_peers: {}
+
+# Example from the OpnSense Road Warrior Documentation
+# wireguard_interfaces:
+#   wg0:
+#     state: started
+#     enabled: true
+#     address: [ 10.10.10.2/32, fd00:1234:abcd:ef09:10:2/128 ]
+#     private_key: 8GboYh0YF3q/hJhoPFoL3HM/ObgOuC8YI6UXWsgWL2M=
+#     dns: [ 192.168.1.254, fd00:1234:abcd:ef09:1:254 ]
+#     peer:
+#       endpoint: opnsense.example.com:51820
+#       public_key: OwdegSTyhlpw7Dbpg8VSUBKXF9CxoQp2gAOdwgqtPVI=
+#       allowed_ips: [ 0.0.0.0/0, ::/0 ]
