@@ -1,3 +1,5 @@
+---
+
 namespace: asymworks
 name: core
 version: 1.0.0
@@ -12,3 +14,7 @@ repository: https://github.com/asymworks/ansible-collections
 
 # Tags
 tags: [infrastructure, tools]
+
+# Requirements
+dependencies:
+  "community.general": ">=7.0.0"
