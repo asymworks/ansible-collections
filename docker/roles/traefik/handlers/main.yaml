@@ -1,0 +1,8 @@
+---
+# Handlers for asymworks.docker.traefik
+
+- name: Asymworks Docker (Traefik) | Restart Traefik
+  when: traefik_enabled
+  community.general.docker_container:
+    name: traefik
+    restart: true

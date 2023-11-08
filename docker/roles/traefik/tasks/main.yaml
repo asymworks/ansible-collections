@@ -23,7 +23,7 @@
     owner: root
     group: root
     mode: '0644'
-  notify: Docker (Traefik) | Restart Traefik
+  notify: Asymworks Docker (Traefik) | Restart Traefik
 
 - name: Asymworks Docker (Traefik) | Setup Docker Network
   community.docker.docker_network:
