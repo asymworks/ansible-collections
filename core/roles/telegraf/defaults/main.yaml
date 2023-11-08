@@ -30,7 +30,10 @@ telegraf_influx_v2_organization: kraussnet
 telegraf_influx_v2_token: influxdb-v2-api-token
 
 # Telegraf Configuration Paths
-telegraf_conf_path: /etc
+telegraf_conf_path: >-
+  {{
+    '/etc' if ansible_facts['os_family']|lower == 'alpine' else '/etc/telegraf'
+  }}
 telegraf_conf_d_path: >-
   {{
     '/etc/telegraf.conf.d'
