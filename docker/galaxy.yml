@@ -1,0 +1,21 @@
+---
+
+namespace: asymworks
+name: docker
+version: 1.0.0
+readme: README.md
+authors:
+  - Jonathan Krauss <jkrauss@asymworks.com>
+description: Common configuration for Docker and supporting utilities
+license:
+  - MIT
+
+repository: https://github.com/asymworks/ansible-collections
+
+# Tags
+tags: [infrastructure, tools]
+
+# Requirements
+dependencies:
+  "community.docker": ">=3.4.0"
+  "community.general": ">=7.0.0"

@@ -1,0 +1,14 @@
+---
+# Handlers for asymworks.docker
+
+- name: Asymworks Docker | Restart Docker
+  ansible.builtin.service:
+    name: docker
+    state: restarted
+
+# Copied from Asymworks Baseline
+- name: Asymworks Telegraf | Restart Agent
+  when: telegraf_enabled
+  ansible.builtin.service:
+    name: telegraf
+    state: restarted
