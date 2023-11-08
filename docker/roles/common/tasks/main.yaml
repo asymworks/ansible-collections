@@ -213,12 +213,12 @@
 # Write Daemon Configuration
 - name: Asymworks Docker | Write Daemon Configuration
   ansible.builtin.copy:
-    content: "{{ daemon_json | to_nice_json(indent=2) }}"
+    content: "{{ daemon_json }}"
     dest: /etc/docker/daemon.json
     owner: root
     group: root
     mode: '0644'
-  notify: Docker | Restart Docker
+  notify: Asymworks Docker | Restart Docker
 
 # Configure Telegraf
 - name: Asymworks Docker | Configure Telegraf
@@ -243,7 +243,7 @@
         src: etc/telegraf.conf.d/20-docker.conf.j2
         dest: "{{ telegraf_conf_d_path }}/20-docker.conf"
         mode: '0644'
-      notify: Telegraf | Restart Agent
+      notify: Asymworks Telegraf | Restart Agent
 
 - name: Asymworks Docker | Remove Telegraf
   when: telegraf_enabled is not defined or not telegraf_enabled or not docker_telegraf
