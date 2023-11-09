@@ -75,9 +75,11 @@
       - vim
 
 # Install Restic and SQLite (not available on armhf)
+# Note bash is required to harmonize backup scripts with Debian
 - name: Asymworks Baseline (Alpine) | Install Restic Packages
   community.general.apk:
     name:
+      - bash
       - restic
       - sqlite
     state: "{{ 'present' if restic_enabled and ansible_architecture != 'armv6l' else 'absent' }}"
