@@ -24,14 +24,14 @@ if ! restic snapshots >/dev/null 2>&1 ; then
 fi
 
 # Run Pre-Backup Scripts
-find /etc/restic/pre-run.d ! -type d -executable -regex '.*/[0-9A-Za-z_-]\{1,\}$' -exec {} \;
+find /etc/restic/pre-run.d ! -type d -executable -regex '.*/[0-9A-Za-z_-]+$' -exec {} \;
 
 # Assemble Include and Exclude Files
 INCLUDE_FILE=$(mktemp restic-include-XXXXXX)
 EXCLUDE_FILE=$(mktemp restic-exclude-XXXXXX)
 
-find /etc/restic/exclude.d ! -type d -regex '.*/[0-9A-Za-z_-]\{1,\}$' -exec cat {} >> ${EXCLUDE_FILE} \;
-find /etc/restic/include.d ! -type d -regex '.*/[0-9A-Za-z_-]\{1,\}$' -exec cat {} >> ${INCLUDE_FILE} \;
+find /etc/restic/exclude.d ! -type d -regex '.*/[0-9A-Za-z_-]+$' -exec cat {} >> ${EXCLUDE_FILE} \;
+find /etc/restic/include.d ! -type d -regex '.*/[0-9A-Za-z_-]+$' -exec cat {} >> ${INCLUDE_FILE} \;
 
 # Run Backup
 restic backup --files-from ${INCLUDE_FILE} --exclude-file=${EXCLUDE_FILE}
