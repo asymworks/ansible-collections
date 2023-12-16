@@ -29,6 +29,12 @@ log:
 pilot:
   dashboard: false
 
+# Skip Certificate Checks on HTTPS backends
+http:
+  serversTransport:
+    noCertCheck:
+      insecureSkipVerify: true
+
 {% if traefik_access_log|default({}) %}
 # Access Logging
 accessLog:
