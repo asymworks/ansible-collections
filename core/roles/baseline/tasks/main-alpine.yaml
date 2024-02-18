@@ -71,6 +71,7 @@
       - curl
       - nfs-utils
       - py3-pip
+      - wireless-tools
       - ufw
       - vim
 
