@@ -79,10 +79,17 @@
 - name: Asymworks Baseline (Alpine) | Install Restic Packages
   community.general.apk:
     name:
-      - bash
       - restic
-      - sqlite
     state: "{{ 'present' if restic_enabled and ansible_architecture != 'armv6l' else 'absent' }}"
+
+# Do not uninstall bash/sqlite along with restic since other applications may need them
+- name: Asymworks Baseline (Alpine) | Install Bash
+  when: restic_enabled
+  community.general.apk:
+    name:
+      - bash
+      - sqlite
+    status: present
 
 # Install mSMTP Packages
 - name: Asymworks Baseline (Alpine) | Install mSMTP Packages
