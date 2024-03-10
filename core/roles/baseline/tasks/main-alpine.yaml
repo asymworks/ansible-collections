@@ -90,7 +90,7 @@
     name:
       - bash
       - sqlite
-    status: present
+    state: present
 
 # Install mSMTP Packages
 - name: Asymworks Baseline (Alpine) | Install mSMTP Packages
