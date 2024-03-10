@@ -30,8 +30,11 @@ find /etc/restic/pre-run.d ! -type d -executable -regex '.*/[0-9A-Za-z_-]+$' -ex
 INCLUDE_FILE=$(mktemp restic-include-XXXXXX)
 EXCLUDE_FILE=$(mktemp restic-exclude-XXXXXX)
 
-find /etc/restic/exclude.d ! -type d -regex '.*/[0-9A-Za-z_-]+$' -exec cat {} >> ${EXCLUDE_FILE} \;
-find /etc/restic/include.d ! -type d -regex '.*/[0-9A-Za-z_-]+$' -exec cat {} >> ${INCLUDE_FILE} \;
+# Note: `grep` command includes a newline in case the include files do not include
+#       a trailing newline, in which case `cat` will merge the last line of the prior
+#       file with the first line of the next. See https://unix.stackexchange.com/a/583381
+find /etc/restic/exclude.d ! -type d -regex '.*/[0-9A-Za-z_-]+$' -exec grep -h "" {} >> ${EXCLUDE_FILE} \;
+find /etc/restic/include.d ! -type d -regex '.*/[0-9A-Za-z_-]+$' -exec grep -h "" {} >> ${INCLUDE_FILE} \;
 
 # Run Backup
 restic backup --files-from ${INCLUDE_FILE} --exclude-file=${EXCLUDE_FILE}
