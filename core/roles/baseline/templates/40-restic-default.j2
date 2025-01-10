@@ -30,11 +30,18 @@ find /etc/restic/pre-run.d ! -type d -executable -regex '.*/[0-9A-Za-z_-]\{1,\}$
 INCLUDE_FILE=$(mktemp restic-include-XXXXXX)
 EXCLUDE_FILE=$(mktemp restic-exclude-XXXXXX)
 
+# Ensure `find` uses POSIX BRE syntax on GNU findutils (this is a breaking change in 4.9.0
+# apparently since prior versions accepted it without the `-regextype posix-basic` flag).
+case $(find --help 2>/dev/null) in
+    *-regextype*) find_options='-regextype posix-basic';;
+    *) find_options=;;
+esac
+
 # Note: `grep` command includes a newline in case the include files do not include
 #       a trailing newline, in which case `cat` will merge the last line of the prior
 #       file with the first line of the next. See https://unix.stackexchange.com/a/583381
-find /etc/restic/exclude.d ! -type d -regex '.*/[0-9A-Za-z_-]\{1,\}$' -exec grep -h "" {} >> ${EXCLUDE_FILE} \;
-find /etc/restic/include.d ! -type d -regex '.*/[0-9A-Za-z_-]\{1,\}$' -exec grep -h "" {} >> ${INCLUDE_FILE} \;
+find /etc/restic/exclude.d $find_options ! -type d -regex '.*/[0-9A-Za-z_-]\{1,\}$' -exec grep -h "" {} >> ${EXCLUDE_FILE} \;
+find /etc/restic/include.d $find_options ! -type d -regex '.*/[0-9A-Za-z_-]\{1,\}$' -exec grep -h "" {} >> ${INCLUDE_FILE} \;
 
 # Run Backup
 restic backup --files-from ${INCLUDE_FILE} --exclude-file=${EXCLUDE_FILE}
