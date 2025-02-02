@@ -3,8 +3,18 @@
 
 # Install Packages
 - name: Asymworks Telegraf (Alpine) | Install Packages
+  when: ansible_memtotal_mb >= 512
   community.general.apk:
     update_cache: true
     state: present
     name:
       - telegraf
+
+- name: Asymworks Telegraf (Alpine) | Install Packages (Slim)
+  when: ansible_memtotal_mb < 512
+  community.general.apk:
+    update_cache: true
+    state: present
+    name:
+      - telegraf-openrc
+      - telegraf-slim
