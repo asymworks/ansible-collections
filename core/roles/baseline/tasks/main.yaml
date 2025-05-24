@@ -38,10 +38,16 @@
   with_items:
     - src: root-ca.crt
       dest: Asymworks_Root_CA.crt
+    - src: root-ca-02.crt
+      dest: Asymworks_Root_CA_02.crt
     - src: identity-ca.crt
       dest: Asymworks_Identity_CA.crt
+    - src: identity-ca-02.crt
+      dest: Asymworks_Identity_CA_02.crt
     - src: network-ca.crt
       dest: Asymworks_Network_CA.crt
+    - src: network-ca-02.crt
+      dest: Asymworks_Network_CA_02.crt
   notify: Asymworks Baseline | Update CA Certificates
 
 # Disable Root SSH Logins
