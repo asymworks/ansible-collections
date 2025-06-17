@@ -67,6 +67,7 @@
     update_cache: true
     state: present
     name:
+      - ca-certificates
       - chrony
       - curl
       - nfs-utils
