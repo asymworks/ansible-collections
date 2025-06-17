@@ -8,7 +8,7 @@ None
 
 ## Role Variables
 
-Available variables are listed below, along with default values if applicable (see `defaults/main.yml`):
+Available variables are listed below, along with default values if applicable (see `defaults/main.yml`). For Alpine Diskless installations, `telegraf-slim` is installed by default, otherwise the mainline `telegraf` package is used. If the `telegraf_slim` variable is defined, it will override that default and either install the mainline version (`telegraf_slim: false`) or the slim version (`telegraf_slim: true`).
 
 ```yaml
 telegraf_enabled: true
@@ -18,6 +18,9 @@ telegraf_collection_interval: "10s"
 telegraf_collection_jitter: "0s"
 telegraf_flush_interval: "10s"
 telegraf_flush_jitter: "5s"
+
+# Force Telegraf Slim
+# telegraf_slim: true
 ```
 
 Whether the Telegraf agent is installed and enabled, global settings, and global tags to include with each metric.
