@@ -18,3 +18,21 @@
     name:
       - telegraf-openrc
       - telegraf-slim
+
+- name: Asymworks Telegraf (Alpine) | Create telegraf Group
+  when: alpine_diskless or telegraf_slim
+  ansible.builtin.group:
+    name: telegraf
+    system: true
+    state: present
+
+- name: Asymworks Telegraf (Alpine) | Create telegraf User
+  when: alpine_diskless or telegraf_slim
+  ansible.builtin.user:
+    name: telegraf
+    group: telegraf
+    create_home: false
+    home: /var/empty
+    shell: /sbin/nologin
+    system: true
+    state: present
