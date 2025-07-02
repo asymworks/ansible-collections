@@ -143,6 +143,12 @@
     enabled: true
     state: started
 
+- name: Asymworks Baseline (Alpine) | Enable Hardware Clock Service
+  ansible.builtin.service:
+    name: hwclock
+    enabled: "{{ has_rtc|bool }}"
+    state: started
+
 # Setup mSMTP MTA (symlink for sendmail)
 - name: Asymworks Baseline (Alpine) | Install msmtp
   when: msmtp_enabled

@@ -9,7 +9,7 @@
 # Check for a Real-Time Clock Device
 - name: Asymworks Baseline Pre-Task | Check for RTC
   ansible.builtin.stat:
-    path: /dev/rtc
+    path: /dev/rtc0
   register: st_rtc
 
 - name: Asymworks Baseline Pre-Task | Register RTC Fact
