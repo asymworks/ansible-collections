@@ -15,12 +15,11 @@
 
 - name: Asymworks Baseline Pre-Task (Alpine) | Register Mountpoint for SD Card
   ansible.builtin.set_fact:
-    alpine_sdcard_path: >-
-      {{
+    alpine_sdcard_path: "{{
         (ansible_mounts|selectattr('device', 'eq', '/dev/mmcblk0p1'))[0]['mount']
         if ansible_mounts|selectattr('device', 'eq', '/dev/mmcblk0p1')
         else ''
-      }}
+      }}"
 
 - name: Asymworks Baseline Pre-Task (Alpine) | Register Diskless Mode
   ansible.builtin.set_fact:
