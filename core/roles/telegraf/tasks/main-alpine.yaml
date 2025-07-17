@@ -3,7 +3,7 @@
 
 # Install Packages
 - name: Asymworks Telegraf (Alpine) | Install Packages
-  when: not alpine_diskless or telegraf_slim is not null and not telegraf_slim
+  when: not alpine_diskless or telegraf_slim != Null and not telegraf_slim
   community.general.apk:
     update_cache: true
     state: present
