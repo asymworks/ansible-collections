@@ -3,6 +3,7 @@
 
 # Telegraf Setup (see also telegraf.yaml)
 telegraf_enabled: true
+telegraf_slim: null
 telegraf_global_tags: {}
 telegraf_hostname: "{{ ansible_fqdn }}"
 

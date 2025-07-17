@@ -12,6 +12,7 @@ Available variables are listed below, along with default values if applicable (s
 
 ```yaml
 telegraf_enabled: true
+telegraf_slim: null
 telegraf_global_tags: {}
 telegraf_hostname: "{{ ansible_fqdn }}"
 telegraf_collection_interval: "10s"
