@@ -27,14 +27,11 @@
     path: /usr/local/share/ca-certificates/asymworks
     state: absent
 
-# Copy Certificate Files
-- name: Asymworks Baseline | Copy CA Certificates
-  ansible.builtin.copy:
-    src: "{{ item.src }}"
-    dest: "/usr/local/share/ca-certificates/{{ item.dest }}"
-    owner: root
-    group: root
-    mode: "0644"
+# Remove Legacy Certificate Files
+- name: Asymworks Baseline | Remove Legacy Certificates
+  ansible.builtin.file:
+    path: "/usr/local/share/ca-certificates/{{ item.dest }}"
+    state: absent
   with_items:
     - src: root-ca.crt
       dest: Asymworks_Root_CA.crt

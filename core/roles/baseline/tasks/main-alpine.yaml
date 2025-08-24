@@ -31,7 +31,7 @@
     - path: usr/local/share/ca-certificates/asymworks
       state: absent
     - path: usr/local/share/ca-certificates
-      state: include
+      state: absent
 
 # Fix Alpine kernel.org Mirror Domain
 - name: Asymworks Baseline (Alpine) | Fix kernel.org APK Mirror
