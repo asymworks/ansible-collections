@@ -25,9 +25,11 @@ providers:
 log:
   level: {{ traefik_log_level }}
 
-# Disable Pilot
-pilot:
-  dashboard: false
+{% if traefik_enable_api | default(false) -%}
+# Enable the API and Dashboard
+api:
+  dashboard: true
+{%- endif %}
 
 # Skip Certificate Checks on HTTPS backends
 http:
