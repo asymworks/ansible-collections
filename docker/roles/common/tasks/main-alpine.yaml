@@ -6,6 +6,7 @@
   community.general.apk:
     name:
       - docker
+      - py3-docker-py
       - py3-pip
     update_cache: true
 
@@ -15,8 +16,3 @@
     cmd: lbu include /srv
   when: alpine_diskless
   become: true
-
-# Install Python Docker SDK
-- name: Asymworks Docker (Alpine) | Install Docker Module for Python
-  ansible.builtin.pip:
-    name: docker
