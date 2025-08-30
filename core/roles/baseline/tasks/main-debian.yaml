@@ -67,3 +67,10 @@
     name: ntp
     enabled: true
     state: started
+
+# Ensure Cron Service is Running/Enabled
+- name: Asymworks Baseline (Debian) | Enable Cron Daemon
+  ansible.builtin.service:
+    name: cron
+    enabled: true
+    state: started

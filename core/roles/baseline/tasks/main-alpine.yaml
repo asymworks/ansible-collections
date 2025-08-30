@@ -149,6 +149,13 @@
     enabled: "{{ has_rtc|bool }}"
     state: started
 
+# Ensure Cron Service is Running/Enabled
+- name: Asymworks Baseline (Alpine) | Enable Cron Daemon
+  ansible.builtin.service:
+    name: crond
+    enabled: true
+    state: started
+
 # Setup mSMTP MTA (symlink for sendmail)
 - name: Asymworks Baseline (Alpine) | Install msmtp
   when: msmtp_enabled
