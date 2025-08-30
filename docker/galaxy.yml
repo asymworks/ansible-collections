@@ -17,5 +17,5 @@ tags: [infrastructure, tools]
 
 # Requirements
 dependencies:
-  "community.docker": ">=3.4.0"
+  "community.docker": ">=4.7.0"
   "community.general": ">=7.0.0"

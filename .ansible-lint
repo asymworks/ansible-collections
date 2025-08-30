@@ -8,3 +8,6 @@ skip_list:
   - meta-no-info
   - var-spacing
   - var-naming[no-role-prefix]
+
+exclude_paths:
+  - .ansible/
