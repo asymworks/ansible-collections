@@ -45,7 +45,7 @@ traefik_logrotate_enabled: "{{ traefik_access_log|bool }}"
 Configures a log rotation for Traefik access logs on the host system.
 
 ```yaml
-traefik_api_enabled: false
+traefik_enable_api: false
 ```
 
 Enables the Traefik API and Dashboard when set to `true`.

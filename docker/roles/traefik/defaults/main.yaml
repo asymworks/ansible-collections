@@ -24,7 +24,7 @@ traefik_docker_ports:
   - "{{ traefik_https_port }}:443/tcp"
 
 # Traefik API Access
-traefik_api_enabled: false
+traefik_enable_api: false
 
 # Traefik Firewall Configuration
 traefik_ufw_app: WWW Full
