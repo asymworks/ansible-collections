@@ -8,6 +8,7 @@
       - docker
       - py3-docker-py
       - py3-pip
+      - py3-requests
     update_cache: true
 
 # Persist /srv in LBU
