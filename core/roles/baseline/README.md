@@ -65,6 +65,7 @@ Whether the `msmtp` mail transfer agent is enabled, and the account settings to 
 
 ```yaml
 restic_enabled: false
+restic_install_rsync: false
 
 restic_repository_uri:
 restic_repository_key:

@@ -84,8 +84,8 @@
       - restic
     state: "{{ 'present' if restic_enabled and ansible_architecture != 'armv6l' else 'absent' }}"
 
-# Do not uninstall bash/sqlite along with restic since other applications may need them
-- name: Asymworks Baseline (Alpine) | Install Bash
+# Do not uninstall bash/sqlite/rsync along with restic since other applications may need them
+- name: Asymworks Baseline (Alpine) | Install Bash and SQLite
   when: restic_enabled
   community.general.apk:
     name:
@@ -93,8 +93,7 @@
       - sqlite
     state: present
 
-# Install Rsync
-- name: Asymworks Baseline (Alpine) | Install Bash
+- name: Asymworks Baseline (Alpine) | Install Rsync
   when: restic_install_rsync
   community.general.apk:
     name: rsync
