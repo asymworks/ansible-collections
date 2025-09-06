@@ -76,7 +76,7 @@
       - ufw
       - vim
 
-# Install Restic and SQLite (not available on armhf)
+# Install Restic, SQLite, and Rsync
 # Note bash is required to harmonize backup scripts with Debian
 - name: Asymworks Baseline (Alpine) | Install Restic Packages
   community.general.apk:
@@ -91,6 +91,13 @@
     name:
       - bash
       - sqlite
+    state: present
+
+# Install Rsync
+- name: Asymworks Baseline (Alpine) | Install Bash
+  when: restic_install_rsync
+  community.general.apk:
+    name: rsync
     state: present
 
 # Install mSMTP Packages

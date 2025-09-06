@@ -36,7 +36,8 @@ msmtp_accounts:
 msmtp_default_account: default
 
 # Restic Setup
-restic_enabled: true
+restic_enabled: false
+restic_install_rsync: false
 
 restic_repository_uri:
 restic_repository_key:

@@ -29,8 +29,20 @@
   ansible.builtin.apt:
     name:
       - restic
-      - sqlite3
     state: "{{ 'present' if restic_enabled else 'absent' }}"
+
+# Do not uninstall sqlite/rsync along with restic since other applications may need them
+- name: Asymworks Baseline (Debian) | Install SQLite
+  when: restic_enabled
+  ansible.builtin.apt:
+    name: sqlite
+    state: present
+
+- name: Asymworks Baseline (Debian) | Install Rsync
+  when: restic_install_rsync
+  ansible.builtin.apt:
+    name: rsync
+    state: present
 
 # Install mSMTP Packages
 - name: Asymworks Baseline (Debian) | Install mSMTP Packages
