@@ -162,6 +162,13 @@
     enabled: true
     state: started
 
+# Ensure Local Service is Running/Enabled
+- name: Asymworks Baseline (Alpine) | Enable Local Service
+  ansible.builtin.service:
+    name: local
+    enabled: true
+    state: started
+
 # Setup mSMTP MTA (symlink for sendmail)
 - name: Asymworks Baseline (Alpine) | Install msmtp
   when: msmtp_enabled
@@ -177,9 +184,3 @@
         src: 98-relink-sendmail.start
         dest: /etc/local.d/98-relink-sendmail.start
         mode: '0755'
-
-    - name: Asymworks Baseline (Alpine / msmtp MTA) | Enable Local Service
-      ansible.builtin.service:
-        name: local
-        enabled: true
-        state: started
