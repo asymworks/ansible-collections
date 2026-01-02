@@ -14,7 +14,7 @@ Available variables are listed below, along with default values if applicable (s
 telegraf_enabled: true
 telegraf_slim: null
 telegraf_global_tags: {}
-telegraf_hostname: "{{ ansible_fqdn }}"
+telegraf_hostname: "{{ ansible_facts['fqdn'] }}"
 telegraf_collection_interval: "10s"
 telegraf_collection_jitter: "0s"
 telegraf_flush_interval: "10s"

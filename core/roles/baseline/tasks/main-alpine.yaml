@@ -3,9 +3,9 @@
 
 # Check Alpine Version >= 3.13 (Asymworks Package Repo Limitation)
 - name: Asymworks Baseline (Alpine) | Check Alpine Version
-  when: ansible_distribution_version is version('3.13', '<')
+  when: ansible_facts['distribution_version'] is version('3.13', '<')
   ansible.builtin.fail:
-    msg: 'Unsupported Alpine Version {{ ansible_distribution_version }} - Please Upgrade to 3.13 or later'
+    msg: 'Unsupported Alpine Version {{ ansible_facts["distribution_version"] }} - Please Upgrade to 3.13 or later'
 
 # Setup LBU Paths
 - name: Asymworks Baseline (Alpine) | Update LBU Paths
@@ -82,7 +82,7 @@
   community.general.apk:
     name:
       - restic
-    state: "{{ 'present' if restic_enabled and ansible_architecture != 'armv6l' else 'absent' }}"
+    state: "{{ 'present' if restic_enabled and ansible_facts['architecture'] != 'armv6l' else 'absent' }}"
 
 # Do not uninstall bash/sqlite/rsync along with restic since other applications may need them
 - name: Asymworks Baseline (Alpine) | Install Bash and SQLite

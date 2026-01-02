@@ -23,8 +23,8 @@ Enables or disables the Diun container and configures the Diun Docker watcher.
 ```yaml
 diun_notif_mail_host: localhost
 diun_notif_mail_port: 25
-diun_notif_mail_localname: "{{ ansible_hostname }}"
-diun_notif_mail_from: "diun@{{ ansible_fqdn }}"
+diun_notif_mail_localname: "{{ ansible_facts['hostname'] }}"
+diun_notif_mail_from: "diun@{{ ansible_facts['fqdn'] }}"
 diun_notif_mail_to: "diun@localhost"
 ```
 

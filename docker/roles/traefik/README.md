@@ -13,7 +13,7 @@ Available variables for the role are listed below, along with default values if 
 ```yaml
 traefik_enabled: false
 traefik_tag: "v2.5"
-traefik_domain: "{{ ansible_domain }}"
+traefik_domain: "{{ ansible_facts['domain'] }}"
 traefik_network: traefik
 traefik_log_level: INFO
 traefik_access_log: {}

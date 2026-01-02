@@ -5,7 +5,7 @@
 telegraf_enabled: true
 telegraf_slim: null
 telegraf_global_tags: {}
-telegraf_hostname: "{{ ansible_fqdn }}"
+telegraf_hostname: "{{ ansible_facts['fqdn'] }}"
 
 # Telegraf Agent Configuration
 telegraf_collection_interval: "10s"

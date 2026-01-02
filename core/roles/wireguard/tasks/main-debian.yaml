@@ -3,9 +3,9 @@
 
 # Ensure Debian version is at least 11 (Bullseye)
 - name: Asymworks Wireguard (Debian) | Check Version
-  when: ansible_distribution_version is version('11', '<')
+  when: ansible_facts['distribution_version'] is version('11', '<')
   ansible.builtin.fail:
-    msg: 'Unsupported Debian Version {{ ansible_distribution_version }} - Please Upgrade to Bullseye or later'
+    msg: 'Unsupported Debian Version {{ ansible_facts["distribution_version"] }} - Please Upgrade to Bullseye or later'
 
 # Install Basic Packages
 - name: Asymworks Wireguard (Debian) | Install Packages

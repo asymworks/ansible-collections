@@ -12,7 +12,7 @@ Available variables are listed below, along with default values if applicable (s
 
 ```yaml
 nfsv4_enabled: false
-nfsv4_idmap_domain: "{{ ansible_domain }}"
+nfsv4_idmap_domain: "{{ ansible_facts['domain'] }}"
 nfsv4_idmap_service: >
   {{
     'rpc.idmapd'

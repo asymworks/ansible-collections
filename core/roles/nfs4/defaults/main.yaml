@@ -2,7 +2,7 @@
 # Variable Defaults for asymworks.core.nfs4
 
 nfsv4_enabled: false
-nfsv4_idmap_domain: "{{ ansible_domain }}"
+nfsv4_idmap_domain: "{{ ansible_facts['domain'] }}"
 nfsv4_idmap_service: >-
   {{
     'rpc.idmapd'

@@ -90,7 +90,7 @@ Configures the default Restic backup job for the server.  The default Restic con
 ```yaml
 # Example restic configuration
 restic_enabled: true
-restic_repository_url: "b2:restic:/{{ ansible_hostname }}"
+restic_repository_url: "b2:restic:/{{ ansible_facts['hostname'] }}"
 restic_repostiory_key: "0123456789abcdef"
 restic_repository_env:
   B2_ACCOUNT_ID: "0xxxxxxxxxxxxxxxxxxxxxxx2"
