@@ -31,4 +31,4 @@ traefik_ufw_app: WWW Full
 traefik_ufw_ports: []
 
 # Traefik Logrotate Configuration
-traefik_logrotate_enabled: "{{ traefik_access_log|bool }}"
+traefik_logrotate_enabled: "{{ traefik_access_log|default({})|length > 0 }}"

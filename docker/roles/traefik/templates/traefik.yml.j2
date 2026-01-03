@@ -37,13 +37,13 @@ http:
     noCertCheck:
       insecureSkipVerify: true
 
-{% if traefik_access_log|default({}) %}
+{% if traefik_access_log|default({})|length > 0 %}
 # Access Logging
 accessLog:
   {{ traefik_access_log|to_nice_yaml(indent=2)|indent(2, False) }}
 
 {% endif %}
-{% if traefik_yml_additional|default({}) %}
+{% if traefik_yml_additional|default({})|length > 0 %}
 {{ traefik_yml_additional|to_nice_yaml(indent=2) }}
 
 {% endif %}
