@@ -9,7 +9,7 @@ no-resolv
 server={{ server }}
 {% endfor %}
 
-{% for domain, upstreams in wireguard_dnsmasq_delegate %}
+{% for domain, upstreams in wireguard_dnsmasq_delegate.items() %}
 {% for server in upstreams %}
 server=/{{ domain }}/{{ server }}
 {% endfor %}
