@@ -32,6 +32,7 @@
     line: nameserver 127.0.0.1
     regexp: '^nameserver 127.0.0.1'
     insertbefore: '^nameserver .*'
+    firstmatch: true
     state: "{{ 'present' if wireguard_dnsmasq_enabled else 'absent' }}"
 
 - name: Asymworks Wireguard | Start DNSmasq
