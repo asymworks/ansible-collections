@@ -27,12 +27,11 @@ Install the Docker input plugin for Telegraf.
 
 ```yaml
 telegraf_docker_gather_services: false
-telegraf_docker_containers: []
 telegraf_docker_containers_include: []
 telegraf_docker_containers_exclude: []
 telegraf_docker_timeout: 5s
-telegraf_docker_stats_perdev: true
-telegraf_docker_stats_total: false
+telegraf_docker_stats_perdev: ["cpu","blkio","network"]
+telegraf_docker_stats_total: ["cpu","blkio","network"]
 ```
 
 Configuration options for the Telegraf Docker input plugin.

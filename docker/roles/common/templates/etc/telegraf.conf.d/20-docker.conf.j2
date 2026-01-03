@@ -12,9 +12,6 @@
     ## Set to true to collect Swarm metrics(desired_replicas, running_replicas)
     gather_services = {{ telegraf_docker_gather_services|bool|lower }}
 
-    ## Only collect metrics for these containers, collect all if empty
-    container_names = [{{ telegraf_docker_containers|map('quote')|join(', ') }}]
-
     ## Containers to include and exclude. Globs accepted.
     ## Note that an empty array for both will include all containers
     container_name_include = [{{ telegraf_docker_containers_include|map('quote')|join(', ') }}]
