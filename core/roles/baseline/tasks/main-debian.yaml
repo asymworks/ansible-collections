@@ -35,7 +35,7 @@
 - name: Asymworks Baseline (Debian) | Install SQLite
   when: restic_enabled
   ansible.builtin.apt:
-    name: sqlite
+    name: sqlite3
     state: present
 
 - name: Asymworks Baseline (Debian) | Install Rsync
