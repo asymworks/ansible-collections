@@ -11,7 +11,7 @@
       - telegraf
 
 - name: Asymworks Telegraf (Alpine) | Install Packages (Slim)
-  when: alpine_diskless or telegraf_slim
+  when: (alpine_diskless and telegraf_slim is None) or telegraf_slim
   community.general.apk:
     update_cache: true
     state: present
@@ -20,7 +20,7 @@
       - telegraf-slim
 
 - name: Asymworks Telegraf (Alpine) | Create telegraf Group
-  when: alpine_diskless or telegraf_slim
+  when: (alpine_diskless and telegraf_slim is None) or telegraf_slim
   ansible.builtin.group:
     name: telegraf
     system: true
