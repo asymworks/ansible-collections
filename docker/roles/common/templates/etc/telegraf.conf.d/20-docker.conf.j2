@@ -32,9 +32,17 @@
 
     ## Whether to report for each container per-device blkio (8:0, 8:1...) and
     ## network (eth0, eth1, ...) stats or not
-    perdevice = {{ telegraf_docker_stats_perdev|bool|lower }}
+{% if telegraf_docker_stats_perdev|length > 0 %}
+    perdevice_include = {{ telegraf_docker_stats_perdev|list|tojson }}
+{% else %}
+    # perdevice_include = ["cpu"]
+{% endif %}
     ## Whether to report for each container total blkio and network stats or not
-    total = {{ telegraf_docker_stats_total|bool|lower }}
+{% if telegraf_docker_stats_total|length > 0 %}
+    total_include = {{ telegraf_docker_stats_total|list|tojson }}
+{% else %}
+    # total_include = ["cpu", "blkio", "network"]
+{% endif %}
 
     ## Note that an empty array for both will include all labels as tags
     docker_label_include = []
