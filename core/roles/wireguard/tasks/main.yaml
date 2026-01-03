@@ -9,3 +9,28 @@
 - name: Asymworks Wireguard | Run Debian Distribution Tasks
   ansible.builtin.import_tasks: main-debian.yaml
   when: ansible_facts['os_family']|lower == 'debian'
+
+- name: Asymworks Wireguard | Copy DNSmasq Configuration
+  ansible.builtin.template:
+    src: dnsmasq.conf.j2
+    dest: /etc/dnsmasq.d/10-wireguard.conf
+    owner: root
+    group: root
+    mode: '0644'
+    state: "{{ 'present' if wireguard_dnsmasq_enabled else 'absent' }}"
+  notify: Asymworks Wireguard | Restart DNSmasq
+
+- name: Asymworks Wireguard | Add DNSmasq Resolver
+  ansible.builtin.lineinfile:
+    path: /etc/resolv.conf
+    line: nameserver 127.0.0.1
+    regexp: '^nameserver 127.0.0.1'
+    insertbefore: '^nameserver .*'
+    state: "{{ 'present' if wireguard_dnsmasq_enabled else 'absent' }}"
+
+- name: Asymworks Wireguard | Start DNSmasq
+  when: wireguard_dnsmasq_enabled
+  ansible.builtin.service:
+    name: dnsmasq
+    state: started
+    enabled: true

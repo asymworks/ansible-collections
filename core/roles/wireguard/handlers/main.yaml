@@ -7,3 +7,9 @@
     name: "wg-quick@{{ item.key }}"
     state: "restarted"
   loop: "{{ wireguard_interfaces|dict2items }}"
+
+- name: Asymworks Wireguard | Restart DNSmasq
+  when: wireguard_dnsmasq_enabled
+  ansible.builtin.service:
+    name: dnsmasq
+    state: restarted

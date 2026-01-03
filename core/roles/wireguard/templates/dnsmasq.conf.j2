@@ -1,0 +1,16 @@
+# DNSmasq configuration for KraussNet Wireguard
+
+listen-address=::1,127.0.0.1
+conf-file=/usr/share/dnsmasq/trust-anchors.conf
+dnssec
+
+no-resolv
+{% for server in wireguard_dnsmasq_upstreams %}
+server={{ server }}
+{% endfor %}
+
+{% for domain, upstreams in wireguard_dnsmasq_delegate %}
+{% for server in upstreams %}
+server=/{{ domain }}/{{ server }}
+{% endfor %}
+{% endfor %}

@@ -33,6 +33,17 @@ wireguard_interfaces:
 
 The `enabled` and `state` keys controls the corresponding service to bring the interface up and down.  The `state` key can be `started`, `stopped`, or `absent` (which will disable the service and delete the configuration file).  Note that setting the `dns` key requires that `resolvconf` is installed on the target system.  If DNS will not be provided over the Wireguard link, the key can be omitted.
 
+The Wireguard role can also set up a local DNSmasq resolver to ensure some or all queries are sent over the Wireguard interface to its specified DNS servers.
+
+```yaml
+wireguard_dnsmasq_enabled: true
+wireguard_dnsmasq_upstreams: [ 1.1.1.1, 1.0.0.1 ]
+wireguard_dnsmasq_delegate:
+  local.lan: [ '10.1.1.1', '10.1.2.2' ]
+```
+
+The `wireguard_dnsmasq_upstreams` variable controls the default upstreams used by DNSmasq. By default it is set up to use Cloudflare DNS. The `wireguard_dnsmasq_delegate` variable can be used to delegate subdomains to different servers, for example to delegate a local LAN domain to a DNS server behind the Wireguard interface.
+
 ## Role Facts
 
 None

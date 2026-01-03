@@ -2,9 +2,16 @@
 # Alpine-Specific Tasks for asymworks.baseline
 
 # Install Packages
-- name: Asymworks Wireguard (Alpine) | Install Packages
+- name: Asymworks Wireguard (Alpine) | Install Wireguard Packages
   community.general.apk:
     update_cache: true
     state: present
     name:
       - wireguard-tools
+
+- name: Asymworks Wireguard (Alpine) | Install DNSmasq Packages
+  community.general.apk:
+    update_cache: true
+    state: "{{ 'present' if wireguard_dnsmasq_enabled else 'absent' }}"
+    name:
+      - dnsmasq

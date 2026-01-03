@@ -8,11 +8,18 @@
     msg: 'Unsupported Debian Version {{ ansible_facts["distribution_version"] }} - Please Upgrade to Bullseye or later'
 
 # Install Basic Packages
-- name: Asymworks Wireguard (Debian) | Install Packages
+- name: Asymworks Wireguard (Debian) | Install Wireguard Packages
   ansible.builtin.apt:
     name:
       - wireguard
     update_cache: true
+
+- name: Asymworks Wireguard (Debian) | Install DNSmasq Packages
+  when: wireguard_dnsmasq_enabled
+  ansible.builtin.apt:
+    state: "{{ 'present' if wireguard_dnsmasq_enabled else 'absent' }}"
+    name:
+      - dnsmasq
 
 # Create Wireguard Configurations
 - name: Asymworks Wireguard (Debian) | Create Interface Configuration
