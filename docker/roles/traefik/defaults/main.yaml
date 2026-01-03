@@ -3,7 +3,7 @@
 
 # Docker Traefik Configuration
 traefik_enabled: false
-traefik_tag: "v2.5"
+traefik_tag: "v3.6"
 traefik_domain: "{{ ansible_facts['domain'] }}"
 traefik_network: traefik
 traefik_log_level: INFO
