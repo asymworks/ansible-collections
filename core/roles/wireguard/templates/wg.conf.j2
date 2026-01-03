@@ -4,8 +4,7 @@
 [Interface]
 PrivateKey = {{ item.value.private_key }}
 Address = {{ item.value.address if item.value.address is string else item.value.address|join(',') }}
-{% if 'dns' in item.value -%}DNS = {{ item.value.dns if item.value.dns is string else item.value.dns|join(',') }}
-{%- endif %}
+{% if 'dns' in item.value -%}DNS = {{ item.value.dns if item.value.dns is string else item.value.dns|join(',') }}{% endif %}
 
 [Peer]
 PublicKey = {{ item.value.peer.public_key }}
