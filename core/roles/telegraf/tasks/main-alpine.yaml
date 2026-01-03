@@ -27,7 +27,7 @@
     state: present
 
 - name: Asymworks Telegraf (Alpine) | Create telegraf User
-  when: alpine_diskless or telegraf_slim
+  when: (alpine_diskless and telegraf_slim == None) or telegraf_slim is truthy
   ansible.builtin.user:
     name: telegraf
     group: telegraf
