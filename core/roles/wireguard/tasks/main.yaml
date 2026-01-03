@@ -11,14 +11,20 @@
   when: ansible_facts['os_family']|lower == 'debian'
 
 - name: Asymworks Wireguard | Copy DNSmasq Configuration
+  when: wireguard_dnsmasq_enabled
   ansible.builtin.template:
     src: dnsmasq.conf.j2
     dest: /etc/dnsmasq.d/10-wireguard.conf
     owner: root
     group: root
     mode: '0644'
-    state: "{{ 'present' if wireguard_dnsmasq_enabled else 'absent' }}"
   notify: Asymworks Wireguard | Restart DNSmasq
+
+- name: Asymworks Wireguard | Remove DNSmasq Configuration
+  when: not wireguard_dnsmasq_enabled
+  ansible.builtin.file:
+    path: /etc/dnsmasq.d/10-wireguard.conf
+    state: absent
 
 - name: Asymworks Wireguard | Add DNSmasq Resolver
   ansible.builtin.lineinfile:

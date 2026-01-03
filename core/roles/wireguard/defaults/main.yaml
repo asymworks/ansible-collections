@@ -15,3 +15,7 @@ wireguard_peers: {}
 #       endpoint: opnsense.example.com:51820
 #       public_key: OwdegSTyhlpw7Dbpg8VSUBKXF9CxoQp2gAOdwgqtPVI=
 #       allowed_ips: [ 0.0.0.0/0, ::/0 ]
+
+wireguard_dnsmasq_enabled: true
+wireguard_dnsmasq_upstreams: [1.1.1.1, 1.0.0.1]
+wireguard_dnsmasq_delegate: {}
