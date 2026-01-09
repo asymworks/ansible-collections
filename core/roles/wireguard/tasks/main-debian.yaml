@@ -21,6 +21,13 @@
     name:
       - dnsmasq
 
+- name: Asymworks Wireguard (Debian) | Disable systemd-resolved
+  when: wireguard_dnsmasq_enabled
+  ansible.builtin.service:
+    name: systemd-resolved
+    state: stopped
+    enabled: false
+
 # Create Wireguard Configurations
 - name: Asymworks Wireguard (Debian) | Create Interface Configuration
   when: item.value.state|default('started') != 'absent'

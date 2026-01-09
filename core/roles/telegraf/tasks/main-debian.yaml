@@ -2,22 +2,33 @@
 # Debian-Specific Tasks for asymworks.telegraf
 
 # Install Influx Data Repository
-- name: Asymworks Telegraf (Debian) | Install Influx Data Package Key
-  ansible.builtin.apt_key:
-    url: https://repos.influxdata.com/influxdata-archive_compat.key
-    state: present
+# - name: Asymworks Telegraf (Debian) | Install Influx Data Package Key
+#   ansible.builtin.apt_key:
+#     url: https://repos.influxdata.com/influxdata-archive_compat.key
+#     state: present
 
-- name: Asymworks Telegraf (Debian) | Remove Old Influx Data Repository
-  ansible.builtin.apt_repository:
-    repo: "deb https://repos.influxdata.com/debian {{ ansible_facts['distribution_release'] }} stable"
-    state: absent
+# - name: Asymworks Telegraf (Debian) | Remove Old Influx Data Repository
+#   ansible.builtin.apt_repository:
+#     repo: "deb https://repos.influxdata.com/debian {{ ansible_facts['distribution_release'] }} stable"
+#     state: absent
 
-- name: Asymworks Telegraf (Debian) | Install Influx Data Repository
-  ansible.builtin.apt_repository:
-    repo: "deb https://repos.influxdata.com/debian stable main"
-    state: present
+# - name: Asymworks Telegraf (Debian) | Install Influx Data Repository
+#   ansible.builtin.apt_repository:
+#     repo: "deb https://repos.influxdata.com/debian stable main"
+#     state: present
 
 # Install Packages
+- name: Asymworks Telegraf (Debian) | Add Influx Data Repository
+  ansible.builtin.deb822_repository:
+    name: influxdata
+    types: [deb]
+    uris: "https://repos.influxdata.com/debian"
+    signed_by: https://repos.influxdata.com/influxdata-archive_compat.key
+    suites: [stable]
+    components: [main]
+    state: present
+    enabled: true
+
 - name: Asymworks Telegraf (Debian) | Install Packages
   ansible.builtin.apt:
     name: telegraf
