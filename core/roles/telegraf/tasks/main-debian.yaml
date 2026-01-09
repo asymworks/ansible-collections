@@ -23,7 +23,7 @@
     name: influxdata
     types: [deb]
     uris: "https://repos.influxdata.com/debian"
-    signed_by: https://repos.influxdata.com/influxdata-archive_compat.key
+    signed_by: https://repos.influxdata.com/influxdata-archive.key
     suites: [stable]
     components: [main]
     state: present
