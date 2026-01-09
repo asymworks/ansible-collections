@@ -19,7 +19,7 @@
     uris: https://download.docker.com/linux/debian
     signed_by: https://download.docker.com/linux/debian/gpg
     suites: ["{{ ansible_facts['distribution_release']|lower }}"]
-    components: [main]
+    components: [stable]
     state: present
     enabled: true
 
