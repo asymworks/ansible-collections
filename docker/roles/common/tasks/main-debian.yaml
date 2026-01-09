@@ -9,19 +9,29 @@
       - ca-certificates
       - gnupg2
       - python3-pip
-      - software-properties-common
     state: present
 
 # Install APT Key and Repository
-- name: Asymworks Docker (Debian) | Install Package Key
-  ansible.builtin.apt_key:
-    url: https://download.docker.com/linux/debian/gpg
+- name: Asymworks Docker (Debian) | Add Repository
+  ansible.builtin.deb822_repository:
+    name: docker
+    types: [deb]
+    uris: https://download.docker.com/linux/debian
+    signed_by: https://download.docker.com/linux/debian/gpg
+    suites: ["{{ ansible_facts['distribution_release']|lower }}"]
+    components: [main]
     state: present
+    enabled: true
 
-- name: Asymworks Docker (Debian) | Install Repository
-  ansible.builtin.apt_repository:
-    repo: "deb https://download.docker.com/linux/debian {{ ansible_facts['distribution_release'] }} stable"
-    state: present
+# - name: Asymworks Docker (Debian) | Install Package Key
+#   ansible.builtin.apt_key:
+#     url: https://download.docker.com/linux/debian/gpg
+#     state: present
+
+# - name: Asymworks Docker (Debian) | Install Repository
+#   ansible.builtin.apt_repository:
+#     repo: "deb https://download.docker.com/linux/debian {{ ansible_facts['distribution_release'] }} stable"
+#     state: present
 
 # Install Docker
 - name: Asymworks Docker (Debian) | Install Docker
